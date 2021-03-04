@@ -1,6 +1,5 @@
 package com.ktb.batch;
 import com.ktb.batch.config.AppConfig;
-import sun.text.resources.BreakIteratorInfo;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -45,9 +44,15 @@ public class Application {
                         break;
                     }
                 }else{
-                    System.out.print(values[0]);
+                    String ValidateResult = ValidateDetail(values);
+                    System.out.print(values[0]+"|"+values[1]+"|"+values[2]+"|"+values[3]+"|"+values[4]+"|"+values[5]+"|");
+                    if(ValidateResult==null){
+                        System.out.println("Result : successful");
+                   }else{
+                        System.out.println("Result : "+ValidateResult);
+                    }
                 }
-                break;
+                count++;
             }
 
         }catch(Exception e){
@@ -62,6 +67,34 @@ public class Application {
             if (!values[4].contains("status")) return false;
             if (!values[5].contains("flag")) return false;
         return true;
+    }
+    public static String ValidateDetail(String[] values){
+        String detail=null;
+            if(values[0].length()>15){
+                detail = "merchantID incorrect";
+                return detail;
+            }
+            if(values[1].length()>8){
+                detail = "TerminalID incorrect";
+                return detail;
+            }
+            if(values[2].length()>100){
+                detail = "Location incorrect";
+                return detail;
+            }
+            if(values[3].length()>8){
+                detail = "Effective incorrect";
+                return detail;
+            }
+            if(values[4].length()>1){
+                detail = "Status incorrect";
+                return detail;
+            }
+            if(values[5].length()>1){
+                detail = "Flag incorrect";
+                return detail;
+            }
+        return detail;
     }
     public static void whileloop() {
         try {
