@@ -1,101 +1,35 @@
-package com.ktb.batch;
-import com.ktb.batch.config.AppConfig;
+package com.Corust1411.batch;
+import com.Corust1411.batch.config.AppConfig;
+import com.Corust1411.batch.repository.DeviceListRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+@ComponentScan(basePackages = {"com.Corust1411.batch"})
+@SpringBootApplication
+@EnableJpaRepositories("com.Corust1411.batch.repository")
+@EnableAutoConfiguration(exclude = { UserDetailsServiceAutoConfiguration.class })
 public class Application {
-    private static AppConfig App = new AppConfig();
+
     public static void main(String[] args) {
-        try {
-            System.out.println("Batch Import Starting");
-            ReadFile();
-        } catch (Exception e) {
-            System.out.println("\nmain > Error > " + e.getMessage());
-        }
-        finally {
-            System.out.println("Batch Import Finished");
-        }
+            SpringApplication.run(Application.class, args);
     }
-    public static String GetFileName(){
 
-        String Pattern = "yyyyMMdd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Pattern);
-        String OutputName;
-        String date = simpleDateFormat.format(new Date());
 
-        OutputName = App.GetSourceDirectory() + App.GetSourceFile().replace("{DATE}", date);
 
-        return OutputName;
-    }
-    public static void ReadFile() {
-        try {
-            String path = GetFileName();
-            String line = "";
-            int count=0;
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                if(count==0){
-                    if (!ValidateHeader(values)) {
-                        System.out.println("Header mismatch!");
-                        break;
-                    }
-                }else{
-                    String ValidateResult = ValidateDetail(values);
-                    System.out.print(values[0]+"|"+values[1]+"|"+values[2]+"|"+values[3]+"|"+values[4]+"|"+values[5]+"|");
-                    if(ValidateResult==null){
-                        System.out.println("Result : successful");
-                   }else{
-                        System.out.println("Result : "+ValidateResult);
-                    }
-                }
-                count++;
-            }
 
-        }catch(Exception e){
-            System.out.print("\nReadFile > error > "+e.getMessage());
-        }
-    }
-    public static boolean ValidateHeader(String[] values){
-            if (!values[0].contains("merchantid")) return false;
-            if (!values[1].contains("terminalid")) return false;
-            if (!values[2].contains("location")) return false;
-            if (!values[3].contains("effective")) return false;
-            if (!values[4].contains("status")) return false;
-            if (!values[5].contains("flag")) return false;
-        return true;
-    }
-    public static String ValidateDetail(String[] values){
-        String detail=null;
-            if(values[0].length()>15){
-                detail = "merchantID incorrect";
-                return detail;
-            }
-            if(values[1].length()>8){
-                detail = "TerminalID incorrect";
-                return detail;
-            }
-            if(values[2].length()>100){
-                detail = "Location incorrect";
-                return detail;
-            }
-            if(values[3].length()>8){
-                detail = "Effective incorrect";
-                return detail;
-            }
-            if(values[4].length()>1){
-                detail = "Status incorrect";
-                return detail;
-            }
-            if(values[5].length()>1){
-                detail = "Flag incorrect";
-                return detail;
-            }
-        return detail;
-    }
+    //////////////////
     public static void whileloop() {
         try {
             Scanner scanner = new Scanner(System.in);
@@ -113,7 +47,7 @@ public class Application {
             }
             System.out.print("Finished the loop, the number is 0 now");
         } catch (Exception e) {
-            System.out.println("\nwhileloop > error > " + e.getMessage());
+            System.out.println("whileloop > error > " + e.getMessage());
         }
     }
     public static void sortnumber() {
