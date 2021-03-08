@@ -32,6 +32,4 @@ public class Device implements Serializable {
     @CreationTimestamp
     @Column(name="time_stamp")
     private Date timestamp;
-
-
 }

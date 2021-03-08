@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class DeviceWorker implements ApplicationRunner {
+public class DeviceWorker implements ApplicationRunner{
     private AppConfig App = new AppConfig();
     @Autowired
     AppConfig appConfig;
@@ -36,7 +36,7 @@ public class DeviceWorker implements ApplicationRunner {
             System.out.println("Batch Import Starting");
             ////
 
-            InsertDB();
+            //InsertDB();
             //List<Device> deviceList = deviceListRepository.GetList();
             //
 

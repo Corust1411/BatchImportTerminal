@@ -1,0 +1,4 @@
+com\Corust1411\batch\repository\DeviceListRepository.class
+com\Corust1411\batch\config\AppConfig.class
+com\Corust1411\batch\entity\Device.class
+com\Corust1411\batch\Application.class

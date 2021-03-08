@@ -13,6 +13,7 @@ public class AppConfig {
 
     //private static PropertyResourceBundle prop = (PropertyResourceBundle) PropertyResourceBundle.getBundle("application");
     //public static String getUatCertOnePath() { return prop.getString("uat.cert.0.path"); }
+
     @Value("${source_directory}")
     private String SourceDirectory;
     @Value("${source_file}")

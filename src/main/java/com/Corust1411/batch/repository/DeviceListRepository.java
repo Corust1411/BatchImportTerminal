@@ -104,14 +104,6 @@ public class DeviceListRepository {
             return null;
         }
     }
-    public List<Device> CheckFlag(){
-        try{
-
-        }catch(Exception e){
-
-        }
-        return null;
-    }
     public Device GetItem2(String merchantID,String terminalID) {
         try {
             String sql = "select merchantid, terminalid from Device_List \n" +
