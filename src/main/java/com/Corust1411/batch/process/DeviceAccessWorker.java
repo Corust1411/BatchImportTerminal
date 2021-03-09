@@ -1,16 +1,14 @@
 package com.Corust1411.batch.process;
 
 import com.Corust1411.batch.config.AppConfig;
-import com.Corust1411.batch.entity.Device;
-import com.Corust1411.batch.entity.DeviceAccess;
-import com.Corust1411.batch.repository.DeviceAccessRepository;
+import com.Corust1411.batch.entity.GateInbound;
+import com.Corust1411.batch.repository.GateInboundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Access;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,47 +18,47 @@ public class DeviceAccessWorker implements ApplicationRunner {
     @Autowired
     AppConfig appConfig;
     @Autowired
-    DeviceAccessRepository deviceAccessRepository;
+    GateInboundRepository deviceAccessRepository;
 
     @Transactional
     @Override
     public void run(ApplicationArguments args) throws Exception {
         try{
-            System.out.println("Starting");
+            System.out.println("Batch Access Starting");
 
-            Insert();
+
 
         }catch(Exception e){
             System.out.println("main > error > "+e.getMessage());
         }finally {
-            System.out.println("Finished");
+            System.out.println("Batch Access Finished");
         }
     }
-
-    public void Insert(){
+    public void InsertAccess(){
         try{
-            DeviceAccess deviceAccess;
+            GateInbound gateInbound;
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS ");
+            DateFormat dataFormat2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             Date date = new Date();
 
-            String Merchant = "110070357505555";
-            String Terminal = "00216410";
-            String Access_time = dateFormat.format(date);
-            String Card_ID = "1411";
-            String Gate_ID = "134";
+            String InboundID = "EK000001"+dataFormat2.format(date);
+            String MerchantID = "110070357505555";
+            String TerminalID = "0553490";
+            String AccessDate = dateFormat.format(date);
+            String CardID = "0234";
+            String GateID = "9999";
 
-
-            deviceAccess = new DeviceAccess();
-            deviceAccess.setMerchant(Merchant);
-            deviceAccess.setTerminal(Terminal);
-            deviceAccess.setAccessTime(Access_time);
-            deviceAccess.setCardID(Card_ID);
-            deviceAccess.setGateID(Gate_ID);
-            deviceAccess.setTransDate(new Date());
-            deviceAccessRepository.Insert(deviceAccess);
-
+            gateInbound = new GateInbound();
+            gateInbound.setInboundID(InboundID);
+            gateInbound.setMerchantID(MerchantID);
+            gateInbound.setTerminalID(TerminalID);
+            gateInbound.setGateID(GateID);
+            gateInbound.setCardID(CardID);
+            gateInbound.setAccessDate(AccessDate);
+            //gateInbound.setTransDate(new Date());
+            deviceAccessRepository.Insert(gateInbound);
         }catch(Exception e){
-            System.out.println("Insert > error > "+e.getMessage());
+            System.out.println("DeviceAccessWorker_InsertAccess > error > "+e.getMessage());
         }
     }
 

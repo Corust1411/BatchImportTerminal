@@ -21,7 +21,7 @@ public class DeviceListRepository {
             entityManager.persist(device);
             result = true;
         }catch(Exception e){
-            System.out.println("Insert > error > "+e.getMessage());
+            System.out.println("Device_Insert > error > "+e.getMessage());
         }
         return result;
     }
@@ -40,7 +40,7 @@ public class DeviceListRepository {
                     .setParameter("time_stamp",device.getTimestamp()).executeUpdate();
 
         }catch(Exception e){
-            System.out.println("Create > error > "+e.getMessage());
+            System.out.println("Device_Create > error > "+e.getMessage());
         }
     }
     public void Update(Device device){
@@ -65,7 +65,7 @@ public class DeviceListRepository {
                     .setParameter("time_stamp",device.getTimestamp()).executeUpdate();
 
         }catch(Exception e){
-            System.out.println("Update > error > "+e.getMessage());
+            System.out.println("Device_Update > error > "+e.getMessage());
         }
     }
     public void Delete(Device device){
@@ -76,7 +76,7 @@ public class DeviceListRepository {
                     .setParameter("merchantid",device.getMerchantID())
                     .setParameter("terminalid",device.getTerminalID()).executeUpdate();
         }catch(Exception e){
-            System.out.println("Delete > error > "+e.getMessage());
+            System.out.println("Device_Delete > error > "+e.getMessage());
         }
     }
     public Device GetItem(String merchantID,String terminalID){
@@ -90,7 +90,7 @@ public class DeviceListRepository {
         }catch(NoResultException e) {
             return null;
         }catch(Exception e){
-            System.out.println("GetItem > error > "+e.getMessage());
+            System.out.println("Device_GetItem > error > "+e.getMessage());
         }
         return null;
     }
@@ -100,7 +100,7 @@ public class DeviceListRepository {
             return entityManager.createNativeQuery(sql,Device.class).getResultList();
 
         }catch(Exception e){
-            System.out.println("GetList > error > "+e.getMessage());
+            System.out.println("Device_GetList > error > "+e.getMessage());
             return null;
         }
     }
@@ -113,7 +113,7 @@ public class DeviceListRepository {
                     .setParameter("terminalid", terminalID).getSingleResult();
 
         } catch (Exception e) {
-            System.out.println("GetItem > error > " + e.getMessage());
+            System.out.println("Device_GetItem > error > " + e.getMessage());
         }
         return null;
     }
