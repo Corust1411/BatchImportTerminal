@@ -13,6 +13,8 @@ import java.util.Date;
 public class GateOutbound implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "outboundIndex")
+    private Integer OutboundIndex;
     @Column(name = "outboundID")
     private String OutboundID;
     @Column(name = "merchantID")

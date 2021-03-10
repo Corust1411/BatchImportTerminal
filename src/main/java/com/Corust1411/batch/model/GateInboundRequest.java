@@ -19,6 +19,8 @@ public class GateInboundRequest {
     private String CardID;
     @JsonProperty("accessDate")
     private String AccessDate;
-    @JsonProperty("transDate")
-    private String TransDate;
+    @JsonProperty("outboundID")
+    private String OutboundID;
+    @JsonProperty("outboundDate")
+    private String OutboundDate;
 }

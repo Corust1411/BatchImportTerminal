@@ -2,6 +2,7 @@ package com.Corust1411.batch.repository;
 
 import com.Corust1411.batch.entity.GateOutbound;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -14,22 +15,24 @@ public class GateOutboundRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public boolean Insert(GateOutbound gateOutbound){
-        boolean result = false;
+        Boolean result = false;
         try{
            entityManager.persist(gateOutbound);
            result = true;
         }catch(Exception e){
-            System.out.println("GateOutbound_Insert > error > "+e.getMessage());
+            System.out.println("GateOutboundRepository_Insert > error > "+e.getMessage());
         }
         return result;
     }
-
+    @Transactional
     public void Create(GateOutbound gateOutbound) {
         try {
-            String sql = "Insert into Gate_Outbound (merchantID,terminalID,gateID,cardID,accessDate,transDate) \n" +
-                    "values (:merchantID,:terminalID,:gateID,:cardID,:accessDate,:transDate)";
+            String sql = "Insert into Gate_Outbound (outboundID,merchantID,terminalID,gateID,cardID,accessDate,transDate) \n" +
+                    "values (:outboundID,:merchantID,:terminalID,:gateID,:cardID,:accessDate,:transDate)";
             entityManager.createNativeQuery(sql)
+                    .setParameter("outboundID",gateOutbound.getOutboundID())
                     .setParameter("merchantID", gateOutbound.getMerchantID())
                     .setParameter("terminalID", gateOutbound.getTerminalID())
                     .setParameter("gateID", gateOutbound.getGateID())
@@ -37,7 +40,7 @@ public class GateOutboundRepository {
                     .setParameter("accessDate", gateOutbound.getAccessDate())
                     .setParameter("transDate", gateOutbound.getTransDate()).executeUpdate();
         } catch (Exception e) {
-            System.out.println("GateOutbound_Create > error > " + e.getMessage());
+            System.out.println("GateOutboundRepository_Create > error > " + e.getMessage());
         }
     }
     public void Update(GateOutbound gateOutbound){
@@ -56,7 +59,7 @@ public class GateOutboundRepository {
                     .setParameter("accessDate",gateOutbound.getAccessDate())
                     .setParameter("transDate",gateOutbound.getTransDate()).executeUpdate();
         }catch(Exception e){
-            System.out.println("GateOutbound_Update > error > "+e.getMessage());
+            System.out.println("GateOutboundRepository_Update > error > "+e.getMessage());
         }
     }
     public void Delete(GateOutbound gateOutbound){
@@ -67,7 +70,7 @@ public class GateOutboundRepository {
                     .setParameter("merchantID",gateOutbound.getMerchantID())
                     .setParameter("terminalID",gateOutbound.getTerminalID()).executeUpdate();
         }catch(Exception e){
-            System.out.println("GateOutbound_Delete > error > "+e.getMessage());
+            System.out.println("GateOutboundRepository_Delete > error > "+e.getMessage());
         }
     }
     public GateOutbound GetItem(String Merchant,String Terminal){
@@ -80,7 +83,7 @@ public class GateOutboundRepository {
         }catch(NoResultException e){
             return null;
         }catch(Exception e){
-            System.out.println("GateOutbound_GetItem > error > "+e.getMessage());
+            System.out.println("GateOutboundRepository_GetItem > error > "+e.getMessage());
             return null;
         }
     }
@@ -89,7 +92,7 @@ public class GateOutboundRepository {
             String sql = "select * from Gate_Outbound";
             return entityManager.createNativeQuery(sql).getResultList();
         }catch(Exception e){
-            System.out.println("GateOutbound_GetList > error > "+e.getMessage());
+            System.out.println("GateOutboundRepository_GetList > error > "+e.getMessage());
             return null;
         }
     }

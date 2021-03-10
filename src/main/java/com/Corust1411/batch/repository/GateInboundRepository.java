@@ -3,6 +3,7 @@ package com.Corust1411.batch.repository;
 
 import com.Corust1411.batch.entity.GateInbound;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,6 +16,7 @@ public class GateInboundRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public boolean Insert(GateInbound gateInbound){
         Boolean result=false;
         try{
@@ -26,6 +28,7 @@ public class GateInboundRepository {
         return result;
     }
 
+    @Transactional
     public void Create(GateInbound gateInbound){
         try{
             String sql = "insert into Gate_Inbound (inboundID,merchantID,terminalID,gateID,cardID,accessDate,transDate) \n" +

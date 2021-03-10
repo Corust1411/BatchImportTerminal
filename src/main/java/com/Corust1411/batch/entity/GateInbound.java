@@ -27,7 +27,7 @@ public class GateInbound implements Serializable {
     private String CardID;
     @Column(name = "accessDate")
     private String AccessDate;
-    //@CreationTimestamp
+    @CreationTimestamp
     @Column(name = "transDate")
-    private String TransDate;
+    private Date TransDate;
 }

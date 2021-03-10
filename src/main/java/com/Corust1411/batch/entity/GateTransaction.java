@@ -1,9 +1,11 @@
 package com.Corust1411.batch.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity
@@ -18,13 +20,14 @@ public class GateTransaction implements Serializable {
     @Column(name = "outBoundID")
     private String OutboundID;
     @Column(name = "isOutbound")
-    private byte IsOutbound;
+    private boolean IsOutbound;
     @Column(name = "inboundDate")
     private String InboundDate;
     @Column(name = "outboundDate")
     private String OutboundDate;
+    @CreationTimestamp
     @Column(name = "transUpdateDate")
-    private String TranUpdateDate;
+    private Date TranUpdateDate;
     @Column(name = "cardID")
     private String CardID;
 }

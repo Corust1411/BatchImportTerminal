@@ -33,7 +33,7 @@ public class DeviceWorker implements ApplicationRunner{
     @Override
     public void run(ApplicationArguments args) throws Exception {
         try {
-            System.out.println("Batch Import Starting");
+            //System.out.println("Batch Import Starting");
             ////
 
             //InsertDB();
@@ -52,9 +52,9 @@ public class DeviceWorker implements ApplicationRunner{
         } catch (Exception e) {
             System.out.println("main > Error > " + e.getMessage());
         }
-        finally {
+        /*finally {
             System.out.println("Batch Import Finished");
-        }
+        }*/
     }
 
 
