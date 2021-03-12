@@ -3,7 +3,6 @@ package com.Corust1411.batch.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Date;
 
 @Data
 public class GateInboundRequest {
@@ -23,4 +22,6 @@ public class GateInboundRequest {
     private String OutboundID;
     @JsonProperty("outboundDate")
     private String OutboundDate;
+    @JsonProperty("date")
+    private String date;
 }

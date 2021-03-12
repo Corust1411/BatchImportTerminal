@@ -1,12 +1,14 @@
 package com.Corust1411.batch.repository;
 
 import com.Corust1411.batch.entity.GateTransaction;
+import com.sun.org.apache.xpath.internal.operations.Gte;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 public class GateTransactionRepository {
@@ -79,4 +81,28 @@ public class GateTransactionRepository {
             return null;
         }
     }
+    public List<GateTransaction> GetfromcardID(String CardID){
+        try{
+            String sql = "select * from Gate_Transaction \n" +
+                    "where cardID = :cardID";
+            return entityManager.createNativeQuery(sql,GateTransaction.class)
+                    .setParameter("cardID",CardID).getResultList();
+        }catch(Exception e){
+            System.out.println("GateTransactionRepository_GetList > error > "+e.getMessage());
+            return null;
+        }
+    }
+    public List<GateTransaction> Getfromdate(String date){
+        try{
+            String sql = "select * from Gate_Transaction\n" +
+                    "where convert(varchar,transUpdatedate,23)=':transUpdateDate'";
+            return entityManager.createNativeQuery(sql,GateTransaction.class)
+                    .setParameter("transUpdateDate",date).getResultList();
+        }catch(Exception e){
+            System.out.println("GateTransactionRepository_GetList > error > "+e.getMessage());
+            return null;
+        }
+    }
+
+
 }

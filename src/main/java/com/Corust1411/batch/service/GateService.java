@@ -13,9 +13,12 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.smartcardio.Card;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class GateService {
@@ -30,9 +33,6 @@ public class GateService {
     public GateInboundResponse Inbound(GateInboundRequest request){
         try {
             GateInbound gateInbound = new GateInbound();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-            DateFormat dateFormat2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-            Date date = new Date();
 
             String InboundID = request.getInboundID();
             String MerchantID = request.getMerchantID();
@@ -58,13 +58,10 @@ public class GateService {
     public GateInboundResponse CreateTransaction(GateInboundRequest request){
         try{
             GateTransaction gateTransaction = new GateTransaction();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-            DateFormat dateFormat2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-            Date date = new Date();
 
             String InboundID = request.getInboundID();
             String CardID = request.getCardID();
-            String InboundDate = dateFormat.format(date);
+            String InboundDate = request.getAccessDate();
             Boolean IsOutbound = false;
 
             gateTransaction.setInboundID(InboundID);
@@ -80,16 +77,13 @@ public class GateService {
     public GateInboundResponse Outbound(GateInboundRequest request){
         try{
             GateOutbound gateOutbound = new GateOutbound();
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
-            DateFormat dateFormat2 = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-            Date date = new Date();
 
             String OutboundID = request.getOutboundID();
             String MerchantID = request.getMerchantID();
             String TerminalID = request.getTerminalID();
             String GateID = request.getGateID();
             String CardID = request.getCardID();
-            String AccessDate = dateFormat.format(date);
+            String AccessDate = request.getOutboundDate();
 
             gateOutbound.setOutboundID(OutboundID);
             gateOutbound.setMerchantID(MerchantID);
@@ -109,7 +103,6 @@ public class GateService {
         try{
             GateTransaction gateTransaction = new GateTransaction();
 
-            Boolean IsOutbound = true;
             String CardID = request.getCardID();
             String OutboundID = request.getOutboundID();
             String OutboundDate = request.getOutboundDate();
@@ -117,9 +110,7 @@ public class GateService {
             gateTransaction.setCardID(CardID);
             gateTransaction.setOutboundID(OutboundID);
             gateTransaction.setOutboundDate(OutboundDate);
-            gateTransaction.setIsOutbound(IsOutbound);
             gateTransactionRepository.Update(gateTransaction);
-            System.out.println("Updated");
         }catch(Exception e){
             System.out.println("GateService_UpdateTransaction > error > " + e.getMessage());
         }
@@ -135,5 +126,24 @@ public class GateService {
         }
         return null;
     }
-
+    public List<GateTransaction> GetfromcardID(GateInboundRequest request){
+        try{
+            String CardID = request.getCardID();
+            List<GateTransaction> gate = gateTransactionRepository.GetfromcardID(CardID);
+            return gate;
+        }catch(Exception e){
+            System.out.println("GateService_GetTransaction > error > " + e.getMessage());
+            return null;
+        }
+    }
+    public List<GateTransaction> Getfromdate(GateInboundRequest request){
+        try{
+            String date = request.getDate();
+            List<GateTransaction> gate = gateTransactionRepository.Getfromdate(date);
+            return gate;
+        }catch(Exception e){
+            System.out.println("GateService_GetTransaction > error > " + e.getMessage());
+            return null;
+        }
+    }
 }

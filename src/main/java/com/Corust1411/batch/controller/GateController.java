@@ -8,10 +8,9 @@ import com.Corust1411.batch.service.GateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/gate")
@@ -34,7 +33,6 @@ public class GateController {
         gateService.Inbound(request);
         //gateService.Lookup(request);
 
-
         return ResponseEntity.ok(gateInboundResponse);
     }
     @PostMapping(value = "/out",consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -44,6 +42,30 @@ public class GateController {
         gateInboundResponse.setRespDesc("success");
 
         gateService.Outbound(request);
+
+        return ResponseEntity.ok(gateInboundResponse);
+    }
+    @GetMapping(value = "/get-trx/cardid/{{card}}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GateInboundResponse> GetGatefromcardID(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
+        GateInboundResponse gateInboundResponse = new GateInboundResponse();
+        gateInboundResponse.setRespCode("1000");
+        gateInboundResponse.setRespDesc("success");
+
+
+        List<GateTransaction> gate =  gateService.GetfromcardID(request);
+        System.out.println("Request : "+ gate);
+
+        return ResponseEntity.ok(gateInboundResponse);
+    }
+    @GetMapping(value = "/get-trx/date/{{date}}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GateInboundResponse> GetGatefromdate(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
+        GateInboundResponse gateInboundResponse = new GateInboundResponse();
+        gateInboundResponse.setRespCode("1000");
+        gateInboundResponse.setRespDesc("success");
+
+
+        List<GateTransaction> gate =  gateService.Getfromdate(request);
+        System.out.println("Request : "+ gate);
 
         return ResponseEntity.ok(gateInboundResponse);
     }
