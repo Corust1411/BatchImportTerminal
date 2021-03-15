@@ -60,14 +60,6 @@ public class GateTransactionRepository {
             System.out.println("GateTransactionRepository_Update > error > "+e.getMessage());
         }
     }
-    public void Delete(GateTransaction gateTransaction){
-        try{
-            String sql = "delete Gate_Transaction \n" +
-                    "where ";
-        }catch(Exception e){
-            System.out.println("GateTransactionRepository_Delete > error > "+e.getMessage());
-        }
-    }
     public GateTransaction GetItem(String CardID){
         try{
             String sql = "select * from Gate_Transaction \n" +
@@ -92,17 +84,28 @@ public class GateTransactionRepository {
             return null;
         }
     }
-    public List<GateTransaction> Getfromdate(String date){
+    public List<GateTransaction> Getfromdate(String Date){
         try{
             String sql = "select * from Gate_Transaction\n" +
-                    "where convert(varchar,transUpdatedate,23)=':transUpdateDate'";
+                    "where convert(varchar,transUpdatedate,23)=:transUpdateDate";
             return entityManager.createNativeQuery(sql,GateTransaction.class)
-                    .setParameter("transUpdateDate",date).getResultList();
+                    .setParameter("transUpdateDate",Date).getResultList();
         }catch(Exception e){
             System.out.println("GateTransactionRepository_GetList > error > "+e.getMessage());
             return null;
         }
     }
-
-
+    @Transactional
+    public List<GateTransaction> DeleteTransactionByCardId(String card){
+        try{
+            String sql = "delete Gate_Transaction \n" +
+                    "where cardID = :cardID ";
+            entityManager.createNativeQuery(sql)
+                    .setParameter("cardID",card).executeUpdate();
+            return null;
+        }catch(Exception e){
+            System.out.println("GateTransactionRepository_DeleteTransactionByCardId > error > " + e.getMessage());
+            return null;
+        }
+    }
 }

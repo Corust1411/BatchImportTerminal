@@ -5,6 +5,7 @@ import com.Corust1411.batch.entity.GateOutbound;
 import com.Corust1411.batch.entity.GateTransaction;
 import com.Corust1411.batch.model.GateInboundRequest;
 import com.Corust1411.batch.model.GateInboundResponse;
+import com.Corust1411.batch.model.GateTransactionByCardIdResponse;
 import com.Corust1411.batch.repository.GateInboundRepository;
 import com.Corust1411.batch.repository.GateOutboundRepository;
 import com.Corust1411.batch.repository.GateTransactionRepository;
@@ -126,23 +127,30 @@ public class GateService {
         }
         return null;
     }
-    public List<GateTransaction> GetfromcardID(GateInboundRequest request){
+    public List<GateTransaction> GetTransactionByCardID(String card){
         try{
-            String CardID = request.getCardID();
-            List<GateTransaction> gate = gateTransactionRepository.GetfromcardID(CardID);
+            List<GateTransaction> gate = gateTransactionRepository.GetfromcardID(card);
             return gate;
         }catch(Exception e){
-            System.out.println("GateService_GetTransaction > error > " + e.getMessage());
+            System.out.println("GateService_GetBycardID > error > " + e.getMessage());
             return null;
         }
     }
-    public List<GateTransaction> Getfromdate(GateInboundRequest request){
+    public List<GateTransaction> GetTransactionByDate(String date){
         try{
-            String date = request.getDate();
             List<GateTransaction> gate = gateTransactionRepository.Getfromdate(date);
             return gate;
         }catch(Exception e){
-            System.out.println("GateService_GetTransaction > error > " + e.getMessage());
+            System.out.println("GateService_GetBydate > error > " + e.getMessage());
+            return null;
+        }
+    }
+    public List<GateTransaction> DelTransactionByInboundID(String card){
+        try{
+            List<GateTransaction> gate = gateTransactionRepository.DeleteTransactionByCardId(card);
+            return gate;
+        }catch(Exception e){
+            System.out.println("GateService_DelTransactionByCardID > error > " + e.getMessage());
             return null;
         }
     }

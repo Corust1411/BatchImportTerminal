@@ -22,6 +22,4 @@ public class GateInboundRequest {
     private String OutboundID;
     @JsonProperty("outboundDate")
     private String OutboundDate;
-    @JsonProperty("date")
-    private String date;
 }

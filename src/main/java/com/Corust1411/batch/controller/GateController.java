@@ -1,11 +1,11 @@
 package com.Corust1411.batch.controller;
 
 import com.Corust1411.batch.entity.GateTransaction;
-import com.Corust1411.batch.model.GateInboundRequest;
-import com.Corust1411.batch.model.GateInboundResponse;
+import com.Corust1411.batch.model.*;
 import com.Corust1411.batch.repository.GateInboundRepository;
 import com.Corust1411.batch.service.GateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,51 +22,102 @@ public class GateController {
     private GateService gateService;
 
     @PostMapping(value = "/in",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GateInboundResponse> PostGateInbound(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
-        GateInboundResponse gateInboundResponse = new GateInboundResponse();
-        gateInboundResponse.setRespCode("1000");
-        gateInboundResponse.setRespDesc("success");
+    public ResponseEntity<GateInboundResponse> PostGateInbound(@RequestBody GateInboundRequest request) {
+        try{
+            GateInboundResponse gateInboundResponse = new GateInboundResponse();
+            gateInboundResponse.setRespCode("1000");
+            gateInboundResponse.setRespDesc("success");
 
-        //GateInboundResponse gateInboundResponse = new GateInboundResponse();
-        //System.out.println("Response = " + gateInboundResponse.toString());
+            gateService.Inbound(request);
 
-        gateService.Inbound(request);
-        //gateService.Lookup(request);
-
-        return ResponseEntity.ok(gateInboundResponse);
+            return ResponseEntity.ok(gateInboundResponse);
+        }catch(Exception e){
+            System.out.println("GateController_PostGateInbound > error > " + e.getMessage());
+            return null;
+        }
     }
     @PostMapping(value = "/out",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GateInboundResponse> PostGateOutbound(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
-        GateInboundResponse gateInboundResponse = new GateInboundResponse();
-        gateInboundResponse.setRespCode("1000");
-        gateInboundResponse.setRespDesc("success");
+    public ResponseEntity<GateInboundResponse> PostGateOutbound(@RequestBody GateInboundRequest request) {
+        try{
+            GateInboundResponse gateInboundResponse = new GateInboundResponse();
+            gateInboundResponse.setRespCode("1000");
+            gateInboundResponse.setRespDesc("success");
 
-        gateService.Outbound(request);
+            gateService.Outbound(request);
 
-        return ResponseEntity.ok(gateInboundResponse);
+            return ResponseEntity.ok(gateInboundResponse);
+        }catch(Exception e){
+            System.out.println("GateController_PostGateOutbound > error > " + e.getMessage());
+            return null;
+        }
+
     }
-    @GetMapping(value = "/get-trx/cardid/{{card}}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GateInboundResponse> GetGatefromcardID(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
-        GateInboundResponse gateInboundResponse = new GateInboundResponse();
-        gateInboundResponse.setRespCode("1000");
-        gateInboundResponse.setRespDesc("success");
+    @GetMapping(value = "/get-trx/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GateTransactionByCardIdResponse> GetTransactionsfromcardID(@PathVariable("cardID") String cardID) {
+        try{
+            GateTransactionByCardIdResponse response = new GateTransactionByCardIdResponse();
+            response.setRespCode(null);
+            response.setRespDesc(null);
+            List<GateTransaction> gate =  gateService.GetTransactionByCardID(cardID);
 
-
-        List<GateTransaction> gate =  gateService.GetfromcardID(request);
-        System.out.println("Request : "+ gate);
-
-        return ResponseEntity.ok(gateInboundResponse);
+            if (gate.size() == 0){
+                response.setRespCode("0001");
+                response.setRespDesc("fail");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }else{
+                response.setRespCode("1000");
+                response.setRespDesc("success");
+                response.setGateTransactions(gate);
+                return ResponseEntity.ok(response);
+            }
+        }catch(Exception e){
+            System.out.println("GateController_GetTransactionfromCardID > error > " + e.getMessage());
+            return null;
+        }
     }
-    @GetMapping(value = "/get-trx/date/{{date}}",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GateInboundResponse> GetGatefromdate(@RequestBody GateInboundRequest request, GateTransaction gateTransaction) {
-        GateInboundResponse gateInboundResponse = new GateInboundResponse();
-        gateInboundResponse.setRespCode("1000");
-        gateInboundResponse.setRespDesc("success");
+    @GetMapping(value = "/get-trx/date/{date}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GateTransactionByDateResponse> GetTransactionsfromdate(@PathVariable("date") String date) {
+        try{
+            GateTransactionByDateResponse response = new GateTransactionByDateResponse();
+            response.setRespCode(null);
+            response.setRespDesc(null);
+            List<GateTransaction> gate =  gateService.GetTransactionByDate(date);
 
+            if(gate.size() == 0){
+                response.setRespDesc("fail");
+                response.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }else{
+                response.setRespDesc("success");
+                response.setRespCode("1000");
+                response.setGateTransactions(gate);
+                return ResponseEntity.ok(response);
+            }
+        }catch(Exception e){
+            System.out.println("GateController_GetTransactionfromdate > error > " + e.getMessage());
+            return null;
+        }
+    }
+    @DeleteMapping(value = "/del-trx/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<DeleteTransactionByCardIdResponse> DelTransactionByCardID(@PathVariable("cardID") String card) {
+        try{
+            DeleteTransactionByCardIdResponse delete = new DeleteTransactionByCardIdResponse();
+            delete.setRespCode(null);
+            delete.setRespDesc(null);
+            List<GateTransaction> gate = gateService.DelTransactionByInboundID(card);
 
-        List<GateTransaction> gate =  gateService.Getfromdate(request);
-        System.out.println("Request : "+ gate);
-
-        return ResponseEntity.ok(gateInboundResponse);
+            if(gate == null){
+                delete.setRespDesc("fail");
+                delete.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(delete);
+            }else{
+                delete.setRespDesc("success");
+                delete.setRespCode("1000");
+                return ResponseEntity.ok(delete);
+            }
+        }catch(Exception e){
+            System.out.println("GateController_GetTransactionfromdate > error > " + e.getMessage());
+            return null;
+        }
     }
 }
