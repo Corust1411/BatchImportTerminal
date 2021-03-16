@@ -5,19 +5,12 @@ import com.Corust1411.batch.entity.GateOutbound;
 import com.Corust1411.batch.entity.GateTransaction;
 import com.Corust1411.batch.model.GateInboundRequest;
 import com.Corust1411.batch.model.GateInboundResponse;
-import com.Corust1411.batch.model.GateTransactionByCardIdResponse;
 import com.Corust1411.batch.repository.GateInboundRepository;
 import com.Corust1411.batch.repository.GateOutboundRepository;
 import com.Corust1411.batch.repository.GateTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.smartcardio.Card;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -145,9 +138,9 @@ public class GateService {
             return null;
         }
     }
-    public List<GateTransaction> DelTransactionByInboundID(String card){
+    public Integer DelTransactionByCardID(String card){
         try{
-            List<GateTransaction> gate = gateTransactionRepository.DeleteTransactionByCardId(card);
+            Integer gate = gateTransactionRepository.DeleteTransactionByCardId(card);
             return gate;
         }catch(Exception e){
             System.out.println("GateService_DelTransactionByCardID > error > " + e.getMessage());

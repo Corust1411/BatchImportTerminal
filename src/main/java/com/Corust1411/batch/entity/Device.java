@@ -1,7 +1,9 @@
 package com.Corust1411.batch.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,7 +31,9 @@ public class Device implements Serializable {
     private String flag;
     @Column(name = "result")
     private String result;
+    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.sss")
     @CreationTimestamp
     @Column(name="time_stamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd HH:mm:ss.SSS",timezone = "Asia/Bangkok")
     private Date timestamp;
 }

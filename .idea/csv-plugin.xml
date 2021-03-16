@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\java\com\Corust1411\batch\service\DeviceService.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\main\java\com\Corust1411\batch\service\GateService.java">
           <value>
             <Attribute>

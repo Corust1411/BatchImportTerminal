@@ -3,6 +3,7 @@ package com.Corust1411.batch.controller;
 import com.Corust1411.batch.entity.GateTransaction;
 import com.Corust1411.batch.model.*;
 import com.Corust1411.batch.repository.GateInboundRepository;
+import com.Corust1411.batch.repository.GateTransactionRepository;
 import com.Corust1411.batch.service.GateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class GateController {
         }
 
     }
-    @GetMapping(value = "/get-trx/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/transaction/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GateTransactionByCardIdResponse> GetTransactionsfromcardID(@PathVariable("cardID") String cardID) {
         try{
             GateTransactionByCardIdResponse response = new GateTransactionByCardIdResponse();
@@ -75,7 +76,7 @@ public class GateController {
             return null;
         }
     }
-    @GetMapping(value = "/get-trx/date/{date}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/transaction/date/{date}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<GateTransactionByDateResponse> GetTransactionsfromdate(@PathVariable("date") String date) {
         try{
             GateTransactionByDateResponse response = new GateTransactionByDateResponse();
@@ -98,22 +99,22 @@ public class GateController {
             return null;
         }
     }
-    @DeleteMapping(value = "/del-trx/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/transaction/cardid/{cardID}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DeleteTransactionByCardIdResponse> DelTransactionByCardID(@PathVariable("cardID") String card) {
         try{
             DeleteTransactionByCardIdResponse delete = new DeleteTransactionByCardIdResponse();
             delete.setRespCode(null);
             delete.setRespDesc(null);
-            List<GateTransaction> gate = gateService.DelTransactionByInboundID(card);
+            Integer gate = gateService.DelTransactionByCardID(card);
 
-            if(gate == null){
-                delete.setRespDesc("fail");
-                delete.setRespCode("0001");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(delete);
-            }else{
+            if(gate > 0){
                 delete.setRespDesc("success");
                 delete.setRespCode("1000");
                 return ResponseEntity.ok(delete);
+            }else{
+                delete.setRespDesc("fail");
+                delete.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(delete);
             }
         }catch(Exception e){
             System.out.println("GateController_GetTransactionfromdate > error > " + e.getMessage());

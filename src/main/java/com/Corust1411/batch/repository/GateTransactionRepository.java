@@ -96,13 +96,12 @@ public class GateTransactionRepository {
         }
     }
     @Transactional
-    public List<GateTransaction> DeleteTransactionByCardId(String card){
+    public Integer DeleteTransactionByCardId(String card){
         try{
             String sql = "delete Gate_Transaction \n" +
                     "where cardID = :cardID ";
-            entityManager.createNativeQuery(sql)
+            return entityManager.createNativeQuery(sql)
                     .setParameter("cardID",card).executeUpdate();
-            return null;
         }catch(Exception e){
             System.out.println("GateTransactionRepository_DeleteTransactionByCardId > error > " + e.getMessage());
             return null;
