@@ -1,5 +1,6 @@
 package com.Corust1411.batch.service;
 
+import com.Corust1411.batch.config.AppConfig;
 import com.Corust1411.batch.entity.Device;
 import com.Corust1411.batch.model.CreateDeviceRequest;
 import com.Corust1411.batch.model.DeleteDeviceRequest;
@@ -9,14 +10,20 @@ import com.Corust1411.batch.repository.DeviceListRepository;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.opencsv.CSVWriter;
 
-import java.util.Date;
-import java.util.List;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-public class DeviceService {
+public class DeviceService{
     @Autowired
     DeviceListRepository deviceListRepository;
+    @Autowired
+    AppConfig appConfig;
+
     public Boolean CreateDevice(CreateDeviceRequest request){
         try{
             Device device = new Device();
@@ -89,6 +96,49 @@ public class DeviceService {
         }catch(Exception e){
             System.out.println("DeviceService_GetListDevice > error > " + e.getMessage());
             return null;
+        }
+    }
+    public List<Device> ExportListDevice(){
+        try{
+            List<Device> result = deviceListRepository.ExportListByRequest();
+            return result;
+        }catch(Exception e){
+            System.out.println("DeviceService_ExportListDevice > error > " + e.getMessage());
+            return null;
+        }
+    }
+    public void CovertintoCSV(ArrayList<Device> deviceList) {
+        try{
+            String CSV_SEPARATOR = ",";
+            String Pattern = "yyyyMMdd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Pattern);
+            String date = simpleDateFormat.format(new Date());
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("device_list_{DATE}.csv".replace("{DATE}",date)), "UTF-8"));
+
+            for (Device device : deviceList)
+            {
+                StringBuffer oneLine = new StringBuffer();
+                oneLine.append(device.getMerchantID().trim().length() == 0? "" : device.getMerchantID());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getTerminalID().trim().length() == 0? "" : device.getTerminalID());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getLocation().trim().length() == 0? "" : device.getLocation());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getEffective().trim().length() == 0? "" : device.getEffective());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getStatus().trim().length() == 0? "" : device.getStatus());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getFlag().trim().length() == 0? "" : device.getFlag());
+                oneLine.append(CSV_SEPARATOR);
+                oneLine.append(device.getTimestamp() == null? "" : device.getTimestamp());
+
+                bw.write(oneLine.toString());
+                bw.newLine();
+            }
+            bw.flush();
+            bw.close();
+        }catch(Exception e){
+            System.out.println("DeviceService_ConvertintoCSV > error > " + e.getMessage());
         }
     }
 }

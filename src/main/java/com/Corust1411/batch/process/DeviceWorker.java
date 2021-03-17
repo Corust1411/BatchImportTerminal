@@ -23,7 +23,6 @@ import java.util.List;
 
 @Component
 public class DeviceWorker implements ApplicationRunner{
-    private AppConfig App = new AppConfig();
     @Autowired
     AppConfig appConfig;
     @Autowired

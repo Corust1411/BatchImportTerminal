@@ -73,6 +73,16 @@ public class DeviceListRepository {
             return null;
         }
     }
+    public List<Device> ExportListByRequest(){
+        try{
+            String sql = "select * from Device_List";
+            return entityManager.createNativeQuery(sql,Device.class).getResultList();
+        }catch(Exception e){
+            System.out.println("DeviceListRepository_GetListByRequest > error > " + e.getMessage());
+            return null;
+        }
+    }
+    ///////
     public void Create(Device device){
         try{
             String sql="insert into Device_List (merchantid,terminalid,location,effective,status,flag,result,time_stamp)\n" +

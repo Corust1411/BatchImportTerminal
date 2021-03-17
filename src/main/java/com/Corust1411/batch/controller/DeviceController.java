@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -24,15 +27,15 @@ public class DeviceController {
             deviceResponse.setRespDesc(null);
             deviceResponse.setRespCode(null);
 
-            Boolean gate = deviceService.CreateDevice(createDeviceRequest);
-            if(gate == true){
+            Boolean cre = deviceService.CreateDevice(createDeviceRequest);
+            if(cre == true){
                 deviceResponse.setRespDesc("success");
                 deviceResponse.setRespCode("1000");
-                return ResponseEntity.ok(deviceResponse);
+                return ResponseEntity.status(HttpStatus.CREATED).body(deviceResponse);
             }else{
                 deviceResponse.setRespDesc("fail");
                 deviceResponse.setRespCode("0001");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(deviceResponse);
+                return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(deviceResponse);
             }
         }catch(Exception e){
             System.out.println("DeviceController_PostCreateDevice > error > " + e.getMessage());
@@ -46,18 +49,18 @@ public class DeviceController {
             deviceResponse.setRespDesc(null);
             deviceResponse.setRespCode(null);
 
-            Integer gate = deviceService.UpdateDevice(updateDeviceRequest);
-            if (gate > 0){
+            Integer update = deviceService.UpdateDevice(updateDeviceRequest);
+            if (update > 0){
                 deviceResponse.setRespDesc("success");
                 deviceResponse.setRespCode("1000");
-                return ResponseEntity.ok(deviceResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(deviceResponse);
             }else{
                 deviceResponse.setRespDesc("fail");
                 deviceResponse.setRespCode("0001");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(deviceResponse);
             }
         }catch(Exception e){
-            System.out.println("DeviceController_PostCreateDevice > error > " + e.getMessage());
+            System.out.println("DeviceController_PostUpdateDevice > error > " + e.getMessage());
             return null;
         }
     }
@@ -68,18 +71,18 @@ public class DeviceController {
             deviceResponse.setRespDesc(null);
             deviceResponse.setRespCode(null);
 
-            Integer gate = deviceService.DeleteDevice(deleteDeviceRequest);
-            if (gate > 0){
+            Integer del = deviceService.DeleteDevice(deleteDeviceRequest);
+            if (del > 0){
                 deviceResponse.setRespDesc("success");
                 deviceResponse.setRespCode("1000");
-                return ResponseEntity.ok(deviceResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(deviceResponse);
             }else{
                 deviceResponse.setRespDesc("fail");
                 deviceResponse.setRespCode("0001");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(deviceResponse);
+                return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body(deviceResponse);
             }
         }catch(Exception e){
-            System.out.println("DeviceController_PostCreateDevice > error > " + e.getMessage());
+            System.out.println("DeviceController_PostDeleteDevice > error > " + e.getMessage());
             return null;
         }
     }
@@ -89,16 +92,40 @@ public class DeviceController {
             ListDeviceResponse list = new ListDeviceResponse();
             list.setRespDesc(null);
             list.setRespCode(null);
-            List<Device> device = deviceService.GetListDevice();
-            System.out.println(device);
-            if(device.size() == 0){
+            List<Device> getlist = deviceService.GetListDevice();
+
+            if(getlist.size() == 0){
                 list.setRespDesc("fail");
                 list.setRespCode("0001");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(list);
+                return ResponseEntity.status(HttpStatus.GONE).body(list);
             }else {
                 list.setRespDesc("success");
                 list.setRespCode("1000");
-                list.setDevice(device);
+                list.setDevice(getlist);
+                return ResponseEntity.ok(list);
+            }
+        }catch(Exception e){
+            System.out.println("DeviceController_GetListDevice > error > " + e.getMessage());
+            return null;
+        }
+    }
+    @GetMapping(value = "/list/export",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ListDeviceResponse> ExportListDevice(){
+        try{
+            ListDeviceResponse list = new ListDeviceResponse();
+            list.setRespDesc(null);
+            list.setRespCode(null);
+            List<Device> exportlist = deviceService.ExportListDevice();
+
+            deviceService.CovertintoCSV((ArrayList<Device>)exportlist);
+
+            if(exportlist.size() == 0){
+                list.setRespDesc("fail");
+                list.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.GONE).body(list);
+            }else {
+                list.setRespDesc("success");
+                list.setRespCode("1000");
                 return ResponseEntity.ok(list);
             }
         }catch(Exception e){
