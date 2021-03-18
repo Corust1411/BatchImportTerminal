@@ -113,10 +113,24 @@ public class DeviceService{
             String Pattern = "yyyyMMdd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Pattern);
             String date = simpleDateFormat.format(new Date());
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("device_list_{DATE}.csv".replace("{DATE}",date)), "UTF-8"));
+            String export_file = appConfig.getExportDirectory() + appConfig.getExportFile().replace("{DATE}",date);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(export_file), "UTF-8"));
 
-            for (Device device : deviceList)
-            {
+            String[] header = {"merchantid","terminalid","location","effective","status","flag","time_stamp"};
+
+            String formattedString = Arrays.toString(header)
+                    .replace("[", "")
+                    .replace("]", "")
+                    .trim();
+            if(deviceList != null) {
+                StringBuffer oneLine = new StringBuffer();
+
+                oneLine.append(formattedString);
+                bw.write(oneLine.toString());
+                bw.newLine();
+            }
+
+            for (Device device : deviceList) {
                 StringBuffer oneLine = new StringBuffer();
                 oneLine.append(device.getMerchantID().trim().length() == 0? "" : device.getMerchantID());
                 oneLine.append(CSV_SEPARATOR);
@@ -124,7 +138,7 @@ public class DeviceService{
                 oneLine.append(CSV_SEPARATOR);
                 oneLine.append(device.getLocation().trim().length() == 0? "" : device.getLocation());
                 oneLine.append(CSV_SEPARATOR);
-                oneLine.append(device.getEffective().trim().length() == 0? "" : device.getEffective());
+                oneLine.append(device.getEffective() == null? "" : device.getEffective());
                 oneLine.append(CSV_SEPARATOR);
                 oneLine.append(device.getStatus().trim().length() == 0? "" : device.getStatus());
                 oneLine.append(CSV_SEPARATOR);

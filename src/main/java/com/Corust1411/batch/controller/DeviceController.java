@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -110,23 +108,24 @@ public class DeviceController {
         }
     }
     @GetMapping(value = "/list/export",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ListDeviceResponse> ExportListDevice(){
+    public ResponseEntity<ExportDeviceResponse> ExportListDevice(){
         try{
-            ListDeviceResponse list = new ListDeviceResponse();
-            list.setRespDesc(null);
-            list.setRespCode(null);
+            ExportDeviceResponse export = new ExportDeviceResponse();
+            export.setRespDesc(null);
+            export.setRespCode(null);
             List<Device> exportlist = deviceService.ExportListDevice();
+
 
             deviceService.CovertintoCSV((ArrayList<Device>)exportlist);
 
             if(exportlist.size() == 0){
-                list.setRespDesc("fail");
-                list.setRespCode("0001");
-                return ResponseEntity.status(HttpStatus.GONE).body(list);
+                export.setRespDesc("fail");
+                export.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.GONE).body(export);
             }else {
-                list.setRespDesc("success");
-                list.setRespCode("1000");
-                return ResponseEntity.ok(list);
+                export.setRespDesc("success");
+                export.setRespCode("1000");
+                return ResponseEntity.ok(export);
             }
         }catch(Exception e){
             System.out.println("DeviceController_GetListDevice > error > " + e.getMessage());

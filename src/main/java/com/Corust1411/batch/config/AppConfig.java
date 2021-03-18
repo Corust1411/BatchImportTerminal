@@ -18,6 +18,10 @@ public class AppConfig {
     private String SourceDirectory;
     @Value("${source_file}")
     private String SourceFile;
+    @Value("${export_directory}")
+    private String ExportDirectory;
+    @Value("${export_file}")
+    private String ExportFile;
 
     /*public String GetSourceDirectory(){
         return prop.getString("source_directory");
