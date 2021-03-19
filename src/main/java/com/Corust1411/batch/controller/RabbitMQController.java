@@ -1,30 +1,45 @@
 package com.Corust1411.batch.controller;
 
+import com.Corust1411.batch.model.RabbitResponse;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import com.Corust1411.batch.model.Employee;
-import com.Corust1411.batch.service.RabbitMQSender;
+import com.Corust1411.batch.model.RabbitRequest;
+import com.Corust1411.batch.service.RabbitMQService;
 
 @RestController
-@RequestMapping(value = "/Corust1411-rabbitmq/")
+@RequestMapping(value = "/device")
 public class RabbitMQController {
 
     @Autowired
-    RabbitMQSender rabbitMQSender;
+    RabbitMQService rabbitMQService;
+    @Autowired
+    RabbitTemplate template;
 
-    @GetMapping(value = "/producer")
-    public String producer(@RequestParam("empName") String empName,@RequestParam("empId") String empId) {
+    @PostMapping(value = "/rabbitmq",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RabbitResponse> producer(@RequestBody RabbitRequest rabbitRequest) {
+        try {
+            RabbitResponse response = new RabbitResponse();
+            response.setRespDesc(null);
+            response.setRespCode(null);
+            Integer result = rabbitMQService.send(rabbitRequest);
 
-        Employee emp=new Employee();
-        emp.setEmpId(empId);
-        emp.setEmpName(empName);
-        rabbitMQSender.send(emp);
-
-        return "Message sent to the RabbitMQ JavaInUse Successfully";
+            if (result == 1){
+                response.setRespCode("1000");
+                response.setRespDesc("success");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else{
+                response.setRespDesc("fail");
+                response.setRespCode("0001");
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+            }
+        }catch(Exception e){
+            System.out.println("RabbitMQController_producer > error > " + e.getMessage());
+            return null;
+        }
     }
-
 }

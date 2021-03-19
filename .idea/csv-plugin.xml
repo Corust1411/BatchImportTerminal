@@ -38,6 +38,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\java\com\Corust1411\batch\controller\RabbitMQController.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\main\java\com\Corust1411\batch\process\DeviceAccessWorker.java">
           <value>
             <Attribute>

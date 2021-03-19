@@ -17,39 +17,34 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig {
 
     @Value("${Corust1411.rabbitmq.queue}")
-    String queueName;
+    String QueueName;
 
     @Value("${Corust1411.rabbitmq.exchange}")
-    String exchange;
+    String Exchange;
 
     @Value("${Corust1411.rabbitmq.routingkey}")
-    private String routingkey;
+    String Routingkey;
 
     @Bean
     Queue queue() {
-        return new Queue(queueName, false);
+        return new Queue(QueueName);
     }
-
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange(exchange);
+        return new DirectExchange(Exchange);
     }
-
     @Bean
     Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
+        return BindingBuilder.bind(queue).to(exchange).with(Routingkey);
     }
-
-    @Bean
+    /*@Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
-
     @Bean
     public AmqpTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
-    }
+    }*/
 }
