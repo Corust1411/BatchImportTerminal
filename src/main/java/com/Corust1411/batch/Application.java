@@ -1,7 +1,4 @@
 package com.Corust1411.batch;
-import com.Corust1411.batch.config.AppConfig;
-import com.Corust1411.batch.repository.DeviceListRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 @ComponentScan(basePackages = {"com.Corust1411.batch"})

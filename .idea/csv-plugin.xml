@@ -31,6 +31,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\main\java\com\Corust1411\batch\config\RabbitConfig.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\main\java\com\Corust1411\batch\controller\GateController.java">
           <value>
             <Attribute>
@@ -81,6 +88,13 @@
           </value>
         </entry>
         <entry key="\src\main\java\com\Corust1411\batch\service\GateService.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\main\java\com\Corust1411\batch\service\RabbitMQService.java">
           <value>
             <Attribute>
               <option name="separator" value=";" />
